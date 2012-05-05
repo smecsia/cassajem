@@ -29,6 +29,11 @@ public class EntityManagerFactory extends BasicService {
         }
     }
 
+    public EntityManagerFactory(){
+        throw new CassajaemException("Not implemented");
+
+    }
+
     public EntityManagerFactory(Connection connection, Class<EntityManager> entityManagerClass) {
         this.connection = connection;
         try {

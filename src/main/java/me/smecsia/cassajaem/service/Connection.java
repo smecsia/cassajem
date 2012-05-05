@@ -1,15 +1,11 @@
 package me.smecsia.cassajaem.service;
 
-import com.genesyslab.wme.common.application.BasicService;
 import me.prettyprint.cassandra.model.BasicKeyspaceDefinition;
 import me.prettyprint.hector.api.Cluster;
 import me.prettyprint.hector.api.Keyspace;
 import me.prettyprint.hector.api.ddl.KeyspaceDefinition;
 import me.prettyprint.hector.api.factory.HFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
+import me.smecsia.cassajaem.api.BasicService;
 
 /**
  * Cassandra connection. Wrapper for the cluster & keyspace of Hector API
@@ -17,8 +13,6 @@ import org.springframework.stereotype.Service;
  * Date: 18.01.12
  * Time: 16:27
  */
-@Lazy
-@Service("database.connection")
 public class Connection extends BasicService {
     // current configuration
     protected String clusterName;
@@ -31,12 +25,7 @@ public class Connection extends BasicService {
     protected Cluster cluster = null;
     protected Keyspace keyspace = null;
 
-    @Autowired
-    public Connection(@Value("#{databaseConfig.conf('wmdb.client.clusterName')}") String clusterName,
-                      @Value("#{databaseConfig.conf('wmdb.client.clusterHost')}") String clusterHost,
-                      @Value("#{databaseConfig.conf('wmdb.client.keyspaceName')}") String keyspaceName,
-                      @Value("#{databaseConfig.conf('wmdb.client.defaultStrategy')}") String strategy,
-                      @Value("#{databaseConfig.conf('wmdb.client.defaultReplicationFactor')}")
+    public Connection(String clusterName, String clusterHost, String keyspaceName, String strategy,
                       Integer replicationFactor) {
         this.clusterName = clusterName;
         this.clusterHost = clusterHost;

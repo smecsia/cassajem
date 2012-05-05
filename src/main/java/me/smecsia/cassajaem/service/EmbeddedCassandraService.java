@@ -1,6 +1,7 @@
 package me.smecsia.cassajaem.service;
 
 import me.smecsia.cassajaem.api.BasicService;
+import me.smecsia.cassajaem.api.CassajaemException;
 import me.smecsia.cassajaem.api.CassajaemInitializationException;
 import org.apache.cassandra.thrift.CassandraDaemon;
 import org.apache.thrift.transport.TTransportException;
@@ -30,6 +31,10 @@ public class EmbeddedCassandraService extends BasicService {
         System.setProperty("cassandra.config", configRes.toString());
         System.setProperty("log4j.defaultInitOverride", "false");
         System.setProperty("cassandra-foreground", "true");
+    }
+
+    public Connection getConnection(){
+        throw new CassajaemException("Not implemented!");
     }
 
     /**

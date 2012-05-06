@@ -1,6 +1,6 @@
 == Cassandra Just Entity Mapping ==
 
-First you need to build the project, build it and install to your local repository:
+First you need to clone the project, build it and install to your local repository:
 <pre>
  $ git clone http://github.com/smecsia/cassajem.git
  $ cd cassajem
@@ -18,35 +18,34 @@ Then you need to add the following dependency to your pom.xml:
 </pre>
 And now you can use all the features of Cassajem:
 <pre lang="java">
-public class Main {
+@ColumnFamily(name = "users")
+public class User implements BasicEntity {
+    @Id
+    private String userName;
 
-    @ColumnFamily(name = "users")
-    public static class User implements BasicEntity {
-        @Id
-        private String userName;
-
-        public String getUserName() {
-            return userName;
-        }
-
-        public void setUserName(String userName) {
-            this.userName = userName;
-        }
+    public String getUserName() {
+        return userName;
     }
 
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+}
+</pre>
+<pre>
+public class Main {
     public static void main(String[] args) throws IOException, TTransportException {
 
         EmbeddedCassandraService ecs = new EmbeddedCassandraService();
         ecs.init();
-        DAOFactory daoFactory = new DAOFactory(ecs.createEntityManagerFactory());
-        DAO<User> dao = daoFactory.getDAO(User.class);
+        EntityManager<User> em = ecs.createEntityManagerFactory().createEntityManager(User.class);
 
         User user = new User();
         user.setUserName("john");
 
-        dao.save(user);
+        em.save(user);
 
-        User loadedUser = dao.byId(user.getUserName());
+        User loadedUser = em.find(user.getUserName());
 
         assert user.getUserName() == loadedUser.getUserName();
 

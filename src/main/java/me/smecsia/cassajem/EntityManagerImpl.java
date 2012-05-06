@@ -35,8 +35,8 @@ import static me.smecsia.cassajem.util.TypesUtil.*;
  * Entity manager implementation class that simplifies the entity management via Hector
  *
  * @param <T> - Class of the managed entity
- *
- * Date: 18.01.12 16:28
+ *            <p/>
+ *            Date: 18.01.12 16:28
  */
 @SuppressWarnings({"NullArgumentToVariableArgMethod", "ConstantConditions", "SuspiciousMethodCalls"})
 public class EntityManagerImpl<T extends BasicEntity> extends BasicService implements EntityManager<T> {
@@ -466,12 +466,30 @@ public class EntityManagerImpl<T extends BasicEntity> extends BasicService imple
                 }
                 processColumnsList(md, instance, columnSlice.getColumns());
             }
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            logAndThrow("Cannot process column slice: ", e);
         }
         return instance;
+    }
+
+
+    /**
+     * Process the rows list and return the processed instances list
+     *
+     * @param rows rows to be processed
+     * @return list of rows
+     */
+    @SuppressWarnings("unchecked")
+    protected List<T> processRows(QueryResult rows) {
+        List<T> resultList = new ArrayList<T>();
+        for (Row row : (Rows<Object, Object, Object>)rows.get()) {
+            if (row.getColumnSlice().getColumns().size() > 0) {
+                T newInstance = (T) processColumnSlice(row.getColumnSlice());
+                getEntityMetadata().getIdColumn().invokeSetter(newInstance, row.getKey());
+                resultList.add(newInstance);
+            }
+        }
+        return resultList;
     }
 
     /**
@@ -752,11 +770,7 @@ public class EntityManagerImpl<T extends BasicEntity> extends BasicService imple
                         .setRange(from, to, false, colLimit);
 
                 QueryResult<Rows<Object, Object, Object>> cResult = multigetSliceQuery.execute();
-                for (Row<Object, Object, Object> row : cResult.get()) {
-                    if (row.getColumnSlice().getColumns().size() > 0) {
-                        resultList.add((T) processColumnSlice(row.getColumnSlice()));
-                    }
-                }
+                resultList = processRows((QueryResult) cResult);
                 break;
         }
         return resultList;
@@ -814,11 +828,7 @@ public class EntityManagerImpl<T extends BasicEntity> extends BasicService imple
                         colLimit);
                 indexedSlicesQuery.setValueSerializer(byteBufferSerializer);
                 QueryResult<OrderedRows<Object, Object, Object>> cResult = indexedSlicesQuery.execute();
-                for (Row<Object, Object, Object> row : cResult.get()) {
-                    if (row.getColumnSlice().getColumns().size() > 0) {
-                        resultList.add((T) processColumnSlice(row.getColumnSlice()));
-                    }
-                }
+                resultList = processRows(cResult);
                 break;
         }
         return resultList;

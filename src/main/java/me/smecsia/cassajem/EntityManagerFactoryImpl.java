@@ -47,6 +47,7 @@ public class EntityManagerFactoryImpl extends BasicService implements EntityMana
      * @return newly created entity manager
      */
     @SuppressWarnings("unchecked")
+    @Override
     public <T extends BasicEntity> EntityManager<T> createEntityManager(Class<T> entityClass) {
         checkInitConnection();
         EntityManager<T> res = null;
@@ -70,6 +71,7 @@ public class EntityManagerFactoryImpl extends BasicService implements EntityMana
      * @return instance of entity manager for the class
      */
     @SuppressWarnings("unchecked")
+    @Override
     public <T extends BasicEntity> EntityManager<T> getEntityManager(Class<T> entityClass) {
         if (!emCache.containsKey(entityClass)) {
             emCache.put(entityClass, createEntityManager(entityClass));
@@ -82,6 +84,7 @@ public class EntityManagerFactoryImpl extends BasicService implements EntityMana
      *
      * @param connection connection
      */
+    @Override
     public void setConnection(Connection connection) {
         this.connection = connection;
     }

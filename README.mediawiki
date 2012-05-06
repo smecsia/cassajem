@@ -1,13 +1,13 @@
 == Cassandra Just Entity Mapping ==
 
 First you need to build the project, build it and install to your local repository:
-<code>
+<pre>
  $ git clone http://github.com/smecsia/cassajem.git<br/>
  $ cd cassajem<br/>
  $ mvn clean install<br/>
-</code>
+</pre>
 Then you need to add the following dependency to your pom.xml:
-<code lang="xml">
+<pre lang="xml">
     &lt;dependencies&gt;
         &lt;dependency&gt;
             &lt;groupId&gt;me.smecsia.cassajem&lt;/groupId&gt;
@@ -15,9 +15,9 @@ Then you need to add the following dependency to your pom.xml:
             &lt;version&gt;0.1&lt;/version&gt;
         &lt;/dependency&gt;
     &lt;/dependencies&gt;
-</code>
+</pre>
 And now you can use all the features of Cassajem:
-<code lang="java">
+<pre lang="java">
 public class Main {
 
     @ColumnFamily(name = "users")
@@ -53,4 +53,4 @@ public class Main {
         System.exit(0);
     }
 }
-</code>
+</pre>

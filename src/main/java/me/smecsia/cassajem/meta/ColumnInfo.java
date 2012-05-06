@@ -6,6 +6,7 @@ import me.smecsia.cassajem.util.TypesUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
@@ -16,10 +17,11 @@ import java.lang.reflect.Method;
  * Time: 13:53
  */
 public class ColumnInfo implements Cloneable {
-    public String name;
+    public String fieldName;
     public Class type;
     public Method getter;
     public Method setter;
+    public Field field;
     public Serializer keySerializer = TypesUtil.stringSerializer;
     public Serializer valueSerializer = TypesUtil.stringSerializer;
     public Class[] compositeTypes = {};
@@ -39,12 +41,21 @@ public class ColumnInfo implements Cloneable {
         this.keySerializer = keySerializer;
     }
 
-    public String getName() {
-        return name;
+    public String getFieldName() {
+        return fieldName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public Field getField() {
+        return field;
+    }
+
+    public void setField(Field field) {
+        this.field = field;
+        field.setAccessible(true);
+    }
+
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
     }
 
     public Class getType() {
@@ -88,28 +99,48 @@ public class ColumnInfo implements Cloneable {
     }
 
     public Object invokeGetter(BasicEntity obj) {
-        try {
-            return getter.invoke(obj);
-        } catch (Exception e) {
-            logger.error("Metadata error! Cannot invoke getter for field " + getName() + ": " + e.getMessage());
-            e.printStackTrace();
+        if (getter != null) {
+            try {
+                return getter.invoke(obj);
+            } catch (Exception e) {
+                logger.error("Metadata error! Cannot invoke getter for field " + getFieldName() + ": " + e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                return getField().get(obj);
+            } catch (Exception e) {
+                logger.error("Metadata error! Cannot access a field " + getFieldName() + " in class " + obj.getClass().getName() + ": " + e.getMessage());
+                e.printStackTrace();
+            }
+
         }
         return null;
     }
 
     public void invokeSetter(BasicEntity obj, Object value) {
-        try {
-            setter.invoke(obj, value);
-        } catch (Exception e) {
-            logger.error("Metadata error! Cannot invoke field " + getName() + ": " + e.getMessage());
-            e.printStackTrace();
+        if (setter != null) {
+            try {
+                setter.invoke(obj, value);
+            } catch (Exception e) {
+                logger.error("Metadata error! Cannot invoke field " + getFieldName() + ": " + e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                getField().set(obj, value);
+            } catch (Exception e) {
+                logger.error("Metadata error! Cannot access a field " + getFieldName() + " in class " + obj.getClass().getName() + ": " + e.getMessage());
+                e.printStackTrace();
+            }
+
         }
     }
 
     @Override
     public ColumnInfo clone() {
         ColumnInfo other = new ColumnInfo();
-        other.setName(getName());
+        other.setFieldName(getFieldName());
         other.setType(getType());
         other.setGetter(getGetter());
         other.setSetter(getSetter());

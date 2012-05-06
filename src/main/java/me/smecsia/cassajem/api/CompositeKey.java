@@ -33,7 +33,7 @@ public class CompositeKey extends me.prettyprint.hector.api.beans.Composite {
     public final CompositeKey setValues(Object... values) {
         for (int i = 0; i < values.length; ++i) {
             if (!types[i].isAssignableFrom(values[i].getClass())) {
-                throw new CassajaemException("Wrong argument type '" + values[i].getClass() + "' for the type '" + types[i] + "'!");
+                throw new CassajemException("Wrong argument type '" + values[i].getClass() + "' for the type '" + types[i] + "'!");
             }
             this.addComponent(values[i], serializerByType(types[i]));
         }

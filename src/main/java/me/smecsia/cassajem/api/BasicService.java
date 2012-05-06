@@ -1,11 +1,9 @@
 package me.smecsia.cassajem.api;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
+import static me.smecsia.cassajem.util.ExceptionUtil.getFormattedStacktrace;
 
 /**
  * Basic class for all services.
@@ -26,14 +24,7 @@ public abstract class BasicService {
      * @param e exception
      */
     public void logAndThrow(Exception e) {
-        List<String> stackTrace = new ArrayList<String>();
-        stackTrace.add(e.getClass().getName() + ": " + e.getMessage());
-        for (StackTraceElement stE : e.getStackTrace()) {
-            String lineNumStr = (stE.getLineNumber() >= 0) ? ":" + stE.getLineNumber() : "";
-            stackTrace.add("\t at " + stE.getClassName() + ".<" + stE.getMethodName() + ">(" + stE.getFileName() +
-                    lineNumStr + ")");
-        }
-        getLogger().error(StringUtils.join(stackTrace, "\r\n"));
+        getLogger().error(getFormattedStacktrace(e));
         logAndThrow(e.getMessage());
     }
 
@@ -47,13 +38,25 @@ public abstract class BasicService {
     }
 
     /**
-     * Write an exception into the logger and throw the CassajaemRuntimeException next
+     * Write an exception into the logger and throw the CassajemException next
+     *
+     * @param msg message
+     * @param e exception
+     */
+    public void logAndThrow(String msg, Exception e) {
+        getLogger().error(msg);
+        getLogger().error(getFormattedStacktrace(e));
+        throw new CassajemException(e);
+    }
+
+    /**
+     * Write an exception into the logger and throw the CassajemException next
      *
      * @param msg message
      */
     public void logAndThrow(String msg) {
         getLogger().error(msg);
-        throw new CassajaemException(msg);
+        throw new CassajemException(msg);
     }
 
 }

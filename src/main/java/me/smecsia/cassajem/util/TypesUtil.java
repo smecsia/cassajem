@@ -1,15 +1,12 @@
 package me.smecsia.cassajem.util;
 
-import me.smecsia.cassajem.util.DateUtil;
-import me.smecsia.cassajem.util.StringUtil;
-import me.smecsia.cassajem.api.CompositeKey;
-import me.smecsia.cassajem.api.EventsCompositeKey;
-import me.smecsia.cassajem.api.UUIDCompositeKey;
-import me.smecsia.cassajem.entity.Event;
 import me.prettyprint.cassandra.serializers.*;
 import me.prettyprint.hector.api.Serializer;
 import me.prettyprint.hector.api.beans.Composite;
 import me.prettyprint.hector.api.ddl.ComparatorType;
+import me.smecsia.cassajem.api.CompositeKey;
+import me.smecsia.cassajem.api.EventsCompositeKey;
+import me.smecsia.cassajem.api.UUIDCompositeKey;
 import org.apache.cassandra.db.marshal.*;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -270,18 +267,6 @@ public class TypesUtil {
      */
     public static UUIDCompositeKey uuidKey(String prefix, UUID value) {
         return new UUIDCompositeKey(prefix, value);
-    }
-
-    /**
-     * Returns new event composite key by event
-     *
-     * @param event - event instance
-     * @return new instance of eventsCompositeKey
-     */
-    public static EventsCompositeKey eventKey(Event event) {
-        return new EventsCompositeKey(event.getEventType(),
-                event.getEventName(), event.getEventID());
-
     }
 
     /**

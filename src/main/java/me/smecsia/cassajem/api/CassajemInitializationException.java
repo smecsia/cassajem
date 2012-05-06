@@ -7,8 +7,8 @@ package me.smecsia.cassajem.api;
  * Date: 4/16/12
  * Time: 9:00 PM
  */
-public class CassajaemInitializationException extends CassajaemException {
-    public CassajaemInitializationException(String s) {
+public class CassajemInitializationException extends CassajemException {
+    public CassajemInitializationException(String s) {
         super(s);
     }
 }

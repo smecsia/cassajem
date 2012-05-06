@@ -1,17 +1,19 @@
 package me.smecsia.cassajem.meta;
 
-import me.smecsia.cassajem.util.MapUtil;
-import me.smecsia.cassajem.api.CompositeKey;
-import me.smecsia.cassajem.api.CassajaemException;
-import me.smecsia.cassajem.api.BasicEntity;
-import me.smecsia.cassajem.api.CassajaemMetaException;
-import me.smecsia.cassajem.meta.annotations.*;
-import me.smecsia.cassajem.util.TypesUtil;
 import me.prettyprint.hector.api.Serializer;
 import me.prettyprint.hector.api.ddl.ColumnType;
 import me.prettyprint.hector.api.ddl.ComparatorType;
+import me.smecsia.cassajem.api.BasicEntity;
+import me.smecsia.cassajem.api.CassajemException;
+import me.smecsia.cassajem.api.CassajemMetaException;
+import me.smecsia.cassajem.api.CompositeKey;
+import me.smecsia.cassajem.meta.annotations.*;
+import me.smecsia.cassajem.util.MapUtil;
+import me.smecsia.cassajem.util.TypesUtil;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.WordUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -49,6 +51,8 @@ public class Metadata<T extends BasicEntity> {
     private Class keyValidationClass = defaultValidationClass;
     private String comparatorTypeAlias = "(UTF8Type)";
     private Serializer nameSerializer = stringSerializer;
+
+    protected Logger logger = LoggerFactory.getLogger(getClass());
 
     public Metadata() {
     }
@@ -103,15 +107,15 @@ public class Metadata<T extends BasicEntity> {
             if (entityInfo != null) {
                 if (entityInfo.getColumnType().equals(ColumnType.SUPER) &&
                         (column != null || columnStorage != null || compositeArray != null))
-                    throw new CassajaemException("ColumnFamily '" + entityInfo.getCfName()
+                    throw new CassajemException("ColumnFamily '" + entityInfo.getCfName()
                             + "' has annotations for a STANDARD column family, but it is SUPER");
                 if (entityInfo.getColumnType().equals(ColumnType.STANDARD) &&
                         (superColumn != null || superColumnArray != null || superColumnStorage != null))
-                    throw new CassajaemException("ColumnFamily '" + entityInfo.getCfName()
+                    throw new CassajemException("ColumnFamily '" + entityInfo.getCfName()
                             + "' has annotations for a SUPER column family, but it is STANDARD");
             } else if (superColumn != null || id != null || columnStorage != null || columnArray != null
                     || superColumnArray != null || compositeArray != null) {
-                throw new CassajaemException("Subtype '" + clazz.getName()
+                throw new CassajemException("Subtype '" + clazz.getName()
                         + "' must have @ColumnFamily annotation unless you don't use any other fields except @Column!");
             }
 
@@ -196,13 +200,13 @@ public class Metadata<T extends BasicEntity> {
     protected SuperColumnInfo readSuperColumnInfo(Class<? extends BasicEntity> clazz, Field field) {
         SuperColumn superColumn = field.getAnnotation(SuperColumn.class);
         if (!BasicEntity.class.isAssignableFrom(field.getType())) {
-            throw new CassajaemMetaException("SuperColumn '" + field.getName() + "' type must be a subclass of BasicEntity");
+            throw new CassajemMetaException("SuperColumn '" + field.getName() + "' type must be a subclass of BasicEntity");
         }
         SuperColumnInfo cInfo = new SuperColumnInfo(MetaCache.instance().forClass(
                 (Class<? extends BasicEntity>) field.getType()));
         fillColumnInfo(cInfo, clazz, field);
         String name = (superColumn.name().isEmpty()) ? field.getName() : superColumn.name();
-        cInfo.setName(name);
+        cInfo.setFieldName(name);
         return cInfo;
     }
 
@@ -214,30 +218,35 @@ public class Metadata<T extends BasicEntity> {
      * @param field - field to be read
      */
     protected void fillColumnInfo(ColumnInfo res, Class<? extends BasicEntity> clazz, Field field) {
-        res.setName(field.getName());
+        res.setField(field);
+        res.setFieldName(field.getName());
         res.setType(field.getType());
         //FIXME: duplicated link to composite types in each columninfo
         if (getEntityInfo() != null) {
             res.setCompositeTypes(getEntityInfo().compositeColumnTypes());
         }
         String fieldCapName = WordUtils.capitalize(field.getName());
+        // FIXME: we take the first found getter here (getSmth or isSmth): not very good style
         try {
-            // FIXME: we take the first found getter here (getSmth or isSmth): not very good style
+            res.setGetter(clazz.getMethod("get" + fieldCapName));
+        } catch (NoSuchMethodException getE) {
             try {
-                res.setGetter(clazz.getMethod("get" + fieldCapName));
-            } catch (NoSuchMethodException e) {
                 if (isBoolean(field.getType())) {
                     res.setGetter(clazz.getMethod("is" + fieldCapName));
                 } else {
-                    throw e;
+                    throw new NoSuchMethodException("is" + fieldCapName);
                 }
+            } catch (NoSuchMethodException isE) {
+                logger.warn("Cannot find getter for the field: " + field.getName() + " of entity class " + clazz.getName());
             }
-            res.setSetter(clazz.getMethod("set" + fieldCapName, field.getType()));
-            res.setKeySerializer(TypesUtil.stringSerializer);
-            res.setValueSerializer(TypesUtil.serializerByType(field.getType()));
-        } catch (NoSuchMethodException e) {
-            throw new CassajaemMetaException("Cannot find required getter/setter in " + clazz.getName() + " :" + e.getMessage());
         }
+        try {
+            res.setSetter(clazz.getMethod("set" + fieldCapName, field.getType()));
+        } catch (NoSuchMethodException setE) {
+            logger.warn("Cannot find setter for the field: " + field.getName() + " of entity class " + clazz.getName());
+        }
+        res.setKeySerializer(TypesUtil.stringSerializer);
+        res.setValueSerializer(TypesUtil.serializerByType(field.getType()));
     }
 
     /**
@@ -261,7 +270,7 @@ public class Metadata<T extends BasicEntity> {
     protected void addDynamicColumnsStorage(Class<? extends BasicEntity> clazz, Field field) {
         Type[] listTypes = getFieldTypeArguments(field);
         if (!Map.class.isAssignableFrom(field.getType()) || listTypes.length != 2) {
-            throw new CassajaemMetaException("DynamicColumnStorage should be parametrized type implementing java.util.Map");
+            throw new CassajemMetaException("DynamicColumnStorage should be parametrized type implementing java.util.Map");
         }
         dynamicColumnsStorage = new ColumnInfo();
         fillColumnInfo(dynamicColumnsStorage, clazz, field);
@@ -281,7 +290,7 @@ public class Metadata<T extends BasicEntity> {
         Type[] listTypes = getFieldTypeArguments(field);
         if (!Map.class.isAssignableFrom(field.getType()) || listTypes.length != 2
                 || BasicEntity.class.isAssignableFrom(listTypes[1].getClass())) {
-            throw new CassajaemMetaException(
+            throw new CassajemMetaException(
                     "DynamicSuperColumnStorage should be parametrized type implementing java.util.Map with a second parameter which is a subclass of BasicEntity");
         }
         dynamicSuperColumnsStorage = new SuperColumnInfo(MetaCache.instance().forClass((Class) listTypes[1]));
@@ -317,7 +326,7 @@ public class Metadata<T extends BasicEntity> {
         Type[] listTypes = getFieldTypeArguments(field);
         if (!Map.class.isAssignableFrom(field.getType()) || listTypes.length != 2
                 || !CompositeKey.class.isAssignableFrom((Class<?>) listTypes[0])) {
-            throw new CassajaemMetaException(
+            throw new CassajemMetaException(
                     "CompositeColumnArray should be parametrized type implementing java.util.Map, first parameter " +
                             "should be a type extending me.smecsia.me.smecsia.cassajem.me.smecsia.me.smecsia.cassajem.api.CompositeKey!");
         }
@@ -327,7 +336,7 @@ public class Metadata<T extends BasicEntity> {
         cInfo.setKeySerializer(serializerByType((Class) listTypes[0]));
         cInfo.setValueSerializer(serializerByType((Class) listTypes[1]));
         String ccaName = (cArray.prefix().isEmpty()) ? field.getName() : cArray.prefix();
-        cInfo.setName(ccaName);
+        cInfo.setFieldName(ccaName);
         compositeArrays.put(ccaName, cInfo);
     }
 
@@ -342,14 +351,14 @@ public class Metadata<T extends BasicEntity> {
     protected void addColumnArray(Class<? extends BasicEntity> clazz, Field field, ColumnArray cArray) {
         Type[] listTypes = getFieldTypeArguments(field);
         if (!Map.class.isAssignableFrom(field.getType()) || listTypes.length != 2) {
-            throw new CassajaemMetaException("ColumnArray should be parametrized type implementing java.util.Map");
+            throw new CassajemMetaException("ColumnArray should be parametrized type implementing java.util.Map");
         }
         ColumnArrayInfo caInfo = new ColumnArrayInfo();
         fillColumnInfo(caInfo, clazz, field);
         caInfo.setKeySerializer(serializerByType((Class) listTypes[0]));
         caInfo.setValueSerializer(serializerByType((Class) listTypes[1]));
         String name = (cArray.name().isEmpty()) ? field.getName() : cArray.name();
-        caInfo.setName(name);
+        caInfo.setFieldName(name);
         columnArrays.put(name, caInfo);
     }
 
@@ -365,14 +374,14 @@ public class Metadata<T extends BasicEntity> {
         Type[] listTypes = getFieldTypeArguments(field);
         if (!Collection.class.isAssignableFrom(field.getType()) || listTypes.length != 1
                 || BasicEntity.class.isAssignableFrom(listTypes[0].getClass())) {
-            throw new CassajaemMetaException(
+            throw new CassajemMetaException(
                     "SuperColumnArray should be parametrized type implementing java.util.Collection with a parameter " +
                             "which is a subclass of BasicEntity");
         }
         SuperColumnArrayInfo cInfo = new SuperColumnArrayInfo(MetaCache.instance().forClass((Class) listTypes[0]));
         fillColumnInfo(cInfo, clazz, field);
         String name = (scArray.name().isEmpty()) ? field.getName() : scArray.name();
-        cInfo.setName(name);
+        cInfo.setFieldName(name);
         superColumnArrays.put(name, cInfo);
     }
 
@@ -400,7 +409,7 @@ public class Metadata<T extends BasicEntity> {
         ColumnInfo cInfo = new ColumnInfo();
         fillColumnInfo(cInfo, clazz, field);
         String fieldName = (column.name().isEmpty()) ? field.getName() : column.name();
-        cInfo.setName(fieldName);
+        cInfo.setFieldName(fieldName);
         columns.put(fieldName, cInfo);
     }
 
@@ -450,7 +459,7 @@ public class Metadata<T extends BasicEntity> {
     public Map<String, ColumnInfo> getAllColumns() {
         Map<String, ColumnInfo> result = getColumns();
         if (idColumn != null && idColumn.persist) {
-            result.put(idColumn.getName(), idColumn);
+            result.put(idColumn.getFieldName(), idColumn);
         }
         return result;
     }

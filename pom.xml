@@ -17,6 +17,7 @@
         <compiler.version>2.3.2</compiler.version>
         <uuid.version>3.2.0</uuid.version>
         <testng.version>6.3.1</testng.version>
+        <spring.version>3.1.1.RELEASE</spring.version>
         <maven-surefire-plugin.version>2.11</maven-surefire-plugin.version>
     </properties>
 
@@ -32,6 +33,12 @@
             <artifactId>commons-lang</artifactId>
             <groupId>commons-lang</groupId>
             <version>${commons-lang.version}</version>
+        </dependency>
+        <!-- SPRING -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
         </dependency>
         <!-- CASSANDRA -->
         <dependency>
@@ -56,20 +63,8 @@
                     <groupId>junit</groupId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>commons-codec</artifactId>
-                    <groupId>commons-codec</groupId>
-                </exclusion>
-                <exclusion>
                     <artifactId>commons-lang</artifactId>
                     <groupId>commons-lang</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>jackson-core-asl</artifactId>
-                    <groupId>org.codehaus.jackson</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>jackson-mapper-asl</artifactId>
-                    <groupId>org.codehaus.jackson</groupId>
                 </exclusion>
             </exclusions>
         </dependency>

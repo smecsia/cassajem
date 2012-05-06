@@ -1,15 +1,15 @@
 package me.smecsia.cassajem.dao;
 
 import me.smecsia.cassajem.EntityManager;
+import me.smecsia.cassajem.EntityManagerFactory;
 import me.smecsia.cassajem.api.BasicEntity;
+import me.smecsia.cassajem.api.CassajemException;
 import me.smecsia.cassajem.api.CompositeKey;
-import me.smecsia.cassajem.api.CassajaemException;
 import me.smecsia.cassajem.meta.CompositeColumnArrayInfo;
 import me.smecsia.cassajem.meta.MetaCache;
 import me.smecsia.cassajem.meta.Metadata;
 import me.smecsia.cassajem.meta.annotations.EntityContext;
 import me.smecsia.cassajem.service.DAOFactory;
-import me.smecsia.cassajem.service.EntityManagerFactory;
 import me.smecsia.cassajem.util.Inflector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -123,7 +123,7 @@ public abstract class AbstractDAO<T extends BasicEntity> implements DAO<T> {
             res = (T) entityClass().newInstance();
             md.getIdColumn().invokeSetter(res, id);
         } catch (Exception e) {
-            throw new CassajaemException(e.getMessage());
+            throw new CassajemException(e.getMessage());
         }
         return res;
     }

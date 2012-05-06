@@ -114,10 +114,10 @@ public class EntityManagerImpl<T extends BasicEntity> extends BasicService imple
         if (type == ColumnType.STANDARD && !md.getEntityInfo().usesComposites()) {
             for (Map.Entry<String, ColumnInfo> cInfo : getEntityMetadata().getAllColumns().entrySet()) {
                 BasicColumnDefinition colDef = new BasicColumnDefinition();
-                colDef.setName(cInfo.getValue().getKeySerializer().toByteBuffer(cInfo.getValue().getName()));
+                colDef.setName(cInfo.getValue().getKeySerializer().toByteBuffer(cInfo.getValue().getFieldName()));
                 colDef.setIndexType(ColumnIndexType.KEYS);
                 colDef.setValidationClass(getEntityMetadata().getDefaultValidationClassName());
-                colDef.setIndexName(md.getEntityInfo().getCfName() + "_" + cInfo.getValue().getName());
+                colDef.setIndexName(md.getEntityInfo().getCfName() + "_" + cInfo.getValue().getFieldName());
                 list.add(colDef);
             }
         }
@@ -209,7 +209,7 @@ public class EntityManagerImpl<T extends BasicEntity> extends BasicService imple
         List<HColumn<Object, Object>> res = new ArrayList<HColumn<Object, Object>>();
         for (Map.Entry<String, ColumnInfo> cInfo : columns.entrySet()) {
             Object value = cInfo.getValue().invokeGetter(object);
-            Object name = cInfo.getValue().getName();
+            Object name = cInfo.getValue().getFieldName();
             if (value != null) {
                 res.add(createColumn(cInfo.getValue(), name, value));
             }
@@ -227,7 +227,7 @@ public class EntityManagerImpl<T extends BasicEntity> extends BasicService imple
     @SuppressWarnings("unchecked")
     protected HSuperColumn<String, Object, Object> createSuperColumn(BasicEntity scValue,
                                                                      SuperColumnInfo scInfo) {
-        return createSuperColumn(scValue, scInfo, scInfo.getName());
+        return createSuperColumn(scValue, scInfo, scInfo.getFieldName());
     }
 
     /**
@@ -305,7 +305,7 @@ public class EntityManagerImpl<T extends BasicEntity> extends BasicService imple
 
             for (int i = 0; i < scaValue.size(); ++i) {
                 BasicEntity scEntity = scaValue.get(i);
-                String columnName = scaInfo.getValue().getName() + "#" + i;
+                String columnName = scaInfo.getValue().getFieldName() + "#" + i;
 
                 res.add(HFactory.<String, Object, Object>createSuperColumn(columnName,
                         createColumnsForSuperColumn(scEntity, scaInfo.getValue()), scaInfo.getValue()
@@ -341,7 +341,7 @@ public class EntityManagerImpl<T extends BasicEntity> extends BasicService imple
                     }
                 }
             }
-            res.add(HFactory.<String, Object, Object>createSuperColumn(scaInfo.getValue().getName(),
+            res.add(HFactory.<String, Object, Object>createSuperColumn(scaInfo.getValue().getFieldName(),
                     columns, scaInfo.getValue().getKeySerializer(), scaInfo.getValue().getValueSerializer(),
                     scaInfo.getValue().getValueSerializer()));
         }
@@ -426,7 +426,7 @@ public class EntityManagerImpl<T extends BasicEntity> extends BasicService imple
                 try {
                     columnName = (String) columnNameValue;
                 } catch (Exception e) {
-                    logger.error("Persistence error: cannot convert column name to a string for CF '"
+                    logAndThrow("Persistence error: cannot convert column name to a string for CF '"
                             + md.getEntityInfo().getCfName() + "'! Please research!");
                 }
                 if (md.getAllColumns().containsKey(columnName)) {
@@ -501,7 +501,7 @@ public class EntityManagerImpl<T extends BasicEntity> extends BasicService imple
                 int count = 0;
                 HSuperColumn sColumn;
                 do {
-                    String sColumnName = scInfo.getValue().getName() + "#" + count;
+                    String sColumnName = scInfo.getValue().getFieldName() + "#" + count;
                     sColumn = superSlice.getColumnByName(sColumnName);
                     if (sColumn != null) {
                         BasicEntity subInstance = (BasicEntity) scInfo.getValue().getColumnMetaData()
@@ -512,7 +512,7 @@ public class EntityManagerImpl<T extends BasicEntity> extends BasicService imple
                             cInfo.getValue().invokeSetter(
                                     subInstance,
                                     processColumnValue(cInfo.getValue(),
-                                            sColumn.getSubColumnByName(cInfo.getValue().getName())));
+                                            sColumn.getSubColumnByName(cInfo.getValue().getFieldName())));
                         }
                         arraySubInstance.add(subInstance);
                     }
@@ -531,7 +531,7 @@ public class EntityManagerImpl<T extends BasicEntity> extends BasicService imple
                     ColumnArrayInfo scInfo = md.getColumnArrays().get(superColumn.getName());
                     Map subInstance = new LinkedHashMap();
                     scInfo.invokeSetter(instance, subInstance);
-                    HSuperColumn sColumn = superSlice.getColumnByName(scInfo.getName());
+                    HSuperColumn sColumn = superSlice.getColumnByName(scInfo.getFieldName());
                     List<HColumn> columns = sColumn.getColumns();
                     for (HColumn column : columns) {
                         subInstance.put(column.getName(), processColumnValue(scInfo, column));

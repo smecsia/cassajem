@@ -15,11 +15,11 @@ import me.smecsia.cassajem.api.BasicService;
  */
 public class Connection extends BasicService {
     // current configuration
-    protected String clusterName;
-    protected String clusterHost;
-    protected String keyspaceName;
-    protected String strategy;
-    protected Integer replicationFactor;
+    protected String clusterName = "Test Cluster";
+    protected String clusterHost = "localhost:9160";
+    protected String keyspaceName = "Test";
+    protected String strategy = "SimpleStrategy";
+    protected Integer replicationFactor = 1;
 
     // Pelops fields
     protected Cluster cluster = null;

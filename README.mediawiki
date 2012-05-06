@@ -2,19 +2,19 @@
 
 First you need to build the project, build it and install to your local repository:
 <pre>
- $ git clone http://github.com/smecsia/cassajem.git<br/>
- $ cd cassajem<br/>
- $ mvn clean install<br/>
+ $ git clone http://github.com/smecsia/cassajem.git
+ $ cd cassajem
+ $ mvn clean install
 </pre>
 Then you need to add the following dependency to your pom.xml:
 <pre lang="xml">
-    &lt;dependencies&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;me.smecsia.cassajem&lt;/groupId&gt;
-            &lt;artifactId&gt;cassajem-core&lt;/artifactId&gt;
-            &lt;version&gt;0.1&lt;/version&gt;
-        &lt;/dependency&gt;
-    &lt;/dependencies&gt;
+    <dependencies>
+        <dependency>
+            <groupId>me.smecsia.cassajem</groupId>
+            <artifactId>cassajem-core</artifactId>
+            <version>0.1</version>
+        </dependency>
+    </dependencies>
 </pre>
 And now you can use all the features of Cassajem:
 <pre lang="java">

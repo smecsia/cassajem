@@ -2,12 +2,12 @@
 
 First you need to build the project, build it and install to your local repository:
 <code>
- $ git clone http://github.com/smecsia/cassajem.git
- $ cd cassajem
- $ mvn clean install
+ $ git clone http://github.com/smecsia/cassajem.git<br/>
+ $ cd cassajem<br/>
+ $ mvn clean install<br/>
 </code>
 Then you need to add the following dependency to your pom.xml:
-<source lang="xml">
+<code lang="xml">
     &lt;dependencies&gt;
         &lt;dependency&gt;
             &lt;groupId&gt;me.smecsia.cassajem&lt;/groupId&gt;
@@ -15,9 +15,9 @@ Then you need to add the following dependency to your pom.xml:
             &lt;version&gt;0.1&lt;/version&gt;
         &lt;/dependency&gt;
     &lt;/dependencies&gt;
-</source>
+</code>
 And now you can use all the features of Cassajem:
-<source lang="java">
+<code lang="java">
 public class Main {
 
     @ColumnFamily(name = "users")
@@ -53,4 +53,4 @@ public class Main {
         System.exit(0);
     }
 }
-</source>
+</code>

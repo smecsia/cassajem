@@ -1,9 +1,9 @@
 package me.smecsia.cassajem;
 
 import me.smecsia.cassajem.api.AbstractEntity;
+import me.smecsia.cassajem.meta.annotations.Column;
 import me.smecsia.cassajem.meta.annotations.ColumnFamily;
 import me.smecsia.cassajem.meta.annotations.Id;
-import me.smecsia.cassajem.service.EmbeddedCassandraService;
 import org.apache.thrift.transport.TTransportException;
 import org.testng.annotations.Test;
 
@@ -14,29 +14,33 @@ import static me.smecsia.cassajem.util.UUIDUtil.timeUUID;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
-public class EntityManagerTest {
-    
-    @ColumnFamily(name = "testEntities")
-    public static class TestEntity extends AbstractEntity {
-        @Id
+public class EntityManagerTest extends CassajemTest{
+
+    @ColumnFamily(name = "users", compositeColumnTypes = {String.class, UUID.class})
+    public static class User extends AbstractEntity {
+        @Id(persist = false)
         public UUID id = timeUUID();
+        
+        @Column
+        public String name = "testName";
     }
-    
+
     @Test
     public void testEntityManager() throws IOException, TTransportException {
-        EmbeddedCassandraService ecs = new EmbeddedCassandraService("/cassandra-test.yaml");
-        ecs.init();
-        EntityManagerFactory emf = ecs.createEntityManagerFactory();
-        EntityManager<TestEntity> em = emf.createEntityManager(TestEntity.class);
-        
-        TestEntity entity = new TestEntity();
-        
-        em.save(entity);
-        
-        TestEntity loaded = em.find(entity.id);
+        EntityManagerFactory emf = getService().createEntityManagerFactory();
+        EntityManager<User> em = emf.createEntityManager(User.class);
 
-        assertNotNull(loaded);
-        assertEquals(loaded.id, entity.id);
+        User user = new User();
+        user.name = "John Smith";
+        
+        em.save(user);
+        
+        User loadedUser = em.find(user.id);
+
+        assertNotNull(loadedUser);
+        assertEquals(loadedUser.id, user.id);
+
+        assertEquals(loadedUser.name, user.name);
         
     }
 }

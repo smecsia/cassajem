@@ -8,7 +8,10 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Properties;
 
-public class Config extends BasicService{
+/**
+ * Class allowing to read all the configuration of the application
+ */
+public class Config extends BasicService {
 
     private static final String CONFIG_PATTERN = "classpath*:cassajem.properties";
 
@@ -78,6 +81,11 @@ public class Config extends BasicService{
         return get(PROP_CASCONFF, DEFAULT_CASS_CONF_FILE);
     }
 
+    /**
+     * Returns the class which is defined in the configuration or the default value
+     *
+     * @return entity manager factory class
+     */
     @SuppressWarnings("unchecked")
     public synchronized Class<EntityManagerFactory> getEntityManagerFactoryClass() {
         if (cachedEmfClass == null) {
@@ -90,6 +98,11 @@ public class Config extends BasicService{
         return cachedEmfClass;
     }
 
+    /**
+     * Returns the class which is defined in the configuration or the default value
+     *
+     * @return entity manager class
+     */
     @SuppressWarnings("unchecked")
     public synchronized Class<EntityManager> getEntityManagerClass() {
         if (cachedEmClass == null) {

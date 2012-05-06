@@ -3,13 +3,13 @@ package me.smecsia.cassajem.dao;
 import me.smecsia.cassajem.EntityManager;
 import me.smecsia.cassajem.EntityManagerFactory;
 import me.smecsia.cassajem.api.BasicEntity;
+import me.smecsia.cassajem.api.BasicService;
 import me.smecsia.cassajem.api.CassajemException;
 import me.smecsia.cassajem.api.CompositeKey;
 import me.smecsia.cassajem.meta.CompositeColumnArrayInfo;
 import me.smecsia.cassajem.meta.MetaCache;
 import me.smecsia.cassajem.meta.Metadata;
 import me.smecsia.cassajem.meta.annotations.EntityContext;
-import me.smecsia.cassajem.service.DAOFactory;
 import me.smecsia.cassajem.util.Inflector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,10 +27,12 @@ import static me.smecsia.cassajem.util.UUIDUtil.minTimeUUID;
  * Date: 03.02.12
  * Time: 17:05
  */
-public abstract class AbstractDAO<T extends BasicEntity> implements DAO<T> {
+public abstract class AbstractDAO<T extends BasicEntity> extends BasicService implements DAO<T> {
     private EntityManager<T> entityManager = null;
 
-    protected EntityContext entityContext;
+    protected EntityContext entityContext = null;
+
+    Class<? extends BasicEntity> entityClass = null;
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -41,10 +43,21 @@ public abstract class AbstractDAO<T extends BasicEntity> implements DAO<T> {
     protected static final List plainEmptyList = Collections.emptyList();
 
     protected Class<? extends BasicEntity> entityClass() {
+        if (entityClass != null) {
+            return entityClass;
+        }
+        if (entityContext == null) {
+            logAndThrow("Cannot get information about the entity class within the DAO: no entity context!");
+        }
         return this.entityContext.entityClass();
     }
 
-    protected AbstractDAO(EntityManagerFactory entityManagerFactory, DAOFactory daoFactory) {
+    public AbstractDAO(EntityManagerFactory entityManagerFactory, DAOFactory daoFactory, Class<? extends BasicEntity> entityClass) {
+        this(entityManagerFactory, daoFactory);
+        this.entityClass = entityClass;
+    }
+
+    public AbstractDAO(EntityManagerFactory entityManagerFactory, DAOFactory daoFactory) {
         this.entityContext = getClass().getAnnotation(EntityContext.class);
         this.entityManagerFactory = entityManagerFactory;
         this.daoFactory = daoFactory;
@@ -54,7 +67,7 @@ public abstract class AbstractDAO<T extends BasicEntity> implements DAO<T> {
      * Create the new DAO (proxy method to daoFactory)
      *
      * @param entityClass class of an entity
-     * @param <C> type of an entity
+     * @param <C>         type of an entity
      * @return newly created DAO
      */
     protected <C extends BasicEntity> DAO<C> getDAO(Class<C> entityClass) {
@@ -63,7 +76,7 @@ public abstract class AbstractDAO<T extends BasicEntity> implements DAO<T> {
 
     /**
      * Returns entity field name by convention
-     * 
+     *
      * @return plural entity name (Ex: Event -> events, Visit -> visits)
      */
     protected String entityFieldNamePlural() {
@@ -72,7 +85,7 @@ public abstract class AbstractDAO<T extends BasicEntity> implements DAO<T> {
 
     /**
      * Returns the maximum possible composite key, when the entity is used as field
-     * 
+     *
      * @return composite key (Ex: &lt;events:FFF...FFF&gt;)
      */
     protected CompositeKey maxKey() {
@@ -140,9 +153,9 @@ public abstract class AbstractDAO<T extends BasicEntity> implements DAO<T> {
 
     /**
      * Return entities by parent class
-     * 
+     *
      * @param parentClazz class of parent (Ex: Identity.class)
-     * @param parentId parent class id (Ex: identityId)
+     * @param parentId    parent class id (Ex: identityId)
      * @return list of pages
      */
     @SuppressWarnings("unchecked")

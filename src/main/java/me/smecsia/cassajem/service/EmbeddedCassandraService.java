@@ -58,6 +58,11 @@ public class EmbeddedCassandraService extends BasicService {
         return cachedConnection;
     }
 
+    /**
+     * Create the new instance of entity manager factory according to the given configuration
+     *
+     * @return factory
+     */
     @SuppressWarnings("unchecked")
     public EntityManagerFactory createEntityManagerFactory() {
         EntityManagerFactory factory = null;

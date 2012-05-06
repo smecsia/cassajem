@@ -9,7 +9,7 @@ import static org.testng.Assert.assertEquals;
 
 /**
  * Created by IntelliJ IDEA.
- * User: isadykov
+ * User: smecsia
  * Date: 22.02.12
  * Time: 15:03
  */

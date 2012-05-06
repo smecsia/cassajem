@@ -7,7 +7,7 @@ import java.util.Map;
 
 /**
  * Singleton allowing to cache meta info from the entities (to not read the metadata each time it is necessary)
- * User: isadykov
+ * User: smecsia
  * Date: 22.02.12
  * Time: 14:51
  */

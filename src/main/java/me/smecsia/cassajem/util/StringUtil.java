@@ -2,7 +2,7 @@ package me.smecsia.cassajem.util;
 
 /**
  * String utility class
- * User: isadykov
+ * User: smecsia
  * Date: 16.02.12
  * Time: 20:37
  */

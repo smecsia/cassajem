@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * Class which is used to define the search conditions (Cassandra filter expression wrapper)
- * User: isadykov
+ * User: smecsia
  * Date: 21.02.12
  * Time: 17:56
  */

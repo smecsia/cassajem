@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 /**
  * Column information cache. Basic column information.
  * Created by IntelliJ IDEA.
- * User: isadykov
+ * User: smecsia
  * Date: 27.01.12
  * Time: 13:53
  */

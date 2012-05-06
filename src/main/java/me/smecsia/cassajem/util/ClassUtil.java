@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * Util class allowing to scan all the classes inside the specified package and other class operations
- * User: isadykov
+ * User: smecsia
  * Date: 16.03.12
  * Time: 15:55
  */

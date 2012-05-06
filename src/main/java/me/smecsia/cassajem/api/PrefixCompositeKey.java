@@ -4,7 +4,7 @@ import org.apache.commons.lang.ArrayUtils;
 
 /**
  * Composite key that use the prefix (Ex: &lt;"pages":{timeUUID}&gt;
- * User: isadykov
+ * User: smecsia
  * Date: 16.02.12
  * Time: 15:43
  */

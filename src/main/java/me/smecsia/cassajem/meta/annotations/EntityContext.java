@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 /**
  * Allows to indicate which type of entity is used in the class
- * User: isadykov
+ * User: smecsia
  * Date: 06.02.12
  * Time: 12:39
  */

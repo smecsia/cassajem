@@ -5,7 +5,7 @@ import java.util.UUID;
 /**
  * Composite column name that uses the following order of the composite types: &lt;UTF8:UUID:UTF8&gt;
  * Example: &lt;"pagesByVisitAndBrowserPageID":{visitUUID}:"{browserPageID}&gt;
- * User: isadykov
+ * User: smecsia
  * Date: 16.02.12
  * Time: 15:43
  */

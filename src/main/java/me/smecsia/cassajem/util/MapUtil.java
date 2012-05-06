@@ -7,7 +7,7 @@ import java.util.Map;
 
 /**
  * Util class to manipulate with maps
- * User: isadykov
+ * User: smecsia
  * Date: 11.03.12
  * Time: 17:02
  */

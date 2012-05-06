@@ -23,7 +23,7 @@ import static me.smecsia.cassajem.util.UUIDUtil.minTimeUUID;
 
 /**
  * Created by IntelliJ IDEA.
- * User: isadykov
+ * User: smecsia
  * Date: 03.02.12
  * Time: 17:05
  */

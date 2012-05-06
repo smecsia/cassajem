@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * Field annotation. Defines the field which should hold the key of the row.
- * User: isadykov
+ * User: smecsia
  * Date: 25.01.12
  * Time: 19:44
  */

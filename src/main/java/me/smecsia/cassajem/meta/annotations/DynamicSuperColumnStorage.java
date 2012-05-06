@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * Maps class field to a list of dynamically created super columns.
- * User: isadykov
+ * User: smecsia
  * Date: 25.01.12
  * Time: 19:44
  */

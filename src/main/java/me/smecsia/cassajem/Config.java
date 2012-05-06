@@ -23,6 +23,7 @@ public class Config extends BasicService {
     private static final String PROP_ENTMGRCS = "me.smecsia.cassajem.entityManager";
     private static final String DEFAULT_CASS_CONF_FILE = "/cassandra.yaml";
     private static final String DEFAULT_CASS_STRATEGY = "SimpleStrategy";
+    private static final String DEFAULT_KEYSPACE_NAME = "default";
     private static final String DEFAULT_ENTITYMGR_FACT = "me.smecsia.cassajem.EntityManagerFactoryImpl";
     private static final String DEFAULT_ENTITYMGR_CLSS = "me.smecsia.cassajem.EntityManagerImpl";
     private static final String DEFAULT_REPLIC_FACTOR = "1";
@@ -58,7 +59,7 @@ public class Config extends BasicService {
     }
 
     public String getKeyspaceName() {
-        return get(PROP_KEYSPACE);
+        return get(PROP_KEYSPACE, DEFAULT_KEYSPACE_NAME);
     }
 
     public String getStrategy() {

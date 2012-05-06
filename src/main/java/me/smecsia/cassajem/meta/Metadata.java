@@ -27,7 +27,7 @@ import static me.smecsia.cassajem.util.TypesUtil.*;
 
 /**
  * Metadata reader to collect entity annotations & etc
- * User: isadykov
+ * User: smecsia
  * Date: 27.01.12
  * Time: 13:45
  *

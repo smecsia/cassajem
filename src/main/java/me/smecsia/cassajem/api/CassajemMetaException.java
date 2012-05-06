@@ -2,7 +2,7 @@ package me.smecsia.cassajem.api;
 
 /**
  * Exception related to metadata reading/writing
- * User: isadykov
+ * User: smecsia
  * Date: 16.02.12
  * Time: 15:49
  */

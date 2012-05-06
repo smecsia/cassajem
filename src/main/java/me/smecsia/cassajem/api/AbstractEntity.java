@@ -2,7 +2,7 @@ package me.smecsia.cassajem.api;
 
 /**
  * Abstract entity for everything (basic implementation of BasicEntity)
- * User: isadykov
+ * User: smecsia
  * Date: 03.02.12
  * Time: 18:17
  */

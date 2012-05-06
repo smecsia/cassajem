@@ -2,7 +2,7 @@ package me.smecsia.cassajem.meta;
 
 /**
  * Created by IntelliJ IDEA.
- * User: isadykov
+ * User: smecsia
  * Date: 27.01.12
  * Time: 13:53
  */

@@ -6,7 +6,7 @@ import java.util.GregorianCalendar;
 
 /**
  * Date util class
- * User: isadykov
+ * User: smecsia
  * Date: 18.01.12
  * Time: 19:49
  */

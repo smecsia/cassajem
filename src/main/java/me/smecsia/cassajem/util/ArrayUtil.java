@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 /**
  * Array utility adapter
- * User: isadykov
+ * User: smecsia
  * Date: 3/30/12
  * Time: 2:33 PM
  */

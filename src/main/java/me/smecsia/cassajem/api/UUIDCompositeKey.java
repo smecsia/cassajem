@@ -4,7 +4,7 @@ import java.util.UUID;
 
 /**
  * Composite column name which uses the UUID as a value of a composite name: &lt;"{prefix}":{UUID}&gt;
- * User: isadykov
+ * User: smecsia
  * Date: 16.02.12
  * Time: 15:43
  */

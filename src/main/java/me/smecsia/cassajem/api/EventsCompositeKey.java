@@ -7,7 +7,7 @@ import java.util.UUID;
 /**
  * Composite column name which is used just for the Events list (inside the other CF)
  * Constructs the column name using eventName and eventType fields: &lt;"events#{eventName}#{eventType}":{timeUUID}&gt;
- * User: isadykov
+ * User: smecsia
  * Date: 16.02.12
  * Time: 15:43
  */

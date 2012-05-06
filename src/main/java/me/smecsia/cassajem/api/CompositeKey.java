@@ -4,7 +4,7 @@ import static me.smecsia.cassajem.util.TypesUtil.serializerByType;
 
 /**
  * Hector composite wrapper. Composite column name that uses the specified list of the types and the specified values
- * User: isadykov
+ * User: smecsia
  * Date: 16.02.12
  * Time: 15:43
  */

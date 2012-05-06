@@ -9,7 +9,7 @@ import static me.smecsia.cassajem.util.TypesUtil.serializerByType;
 /**
  * Class holding the metadata about the entity class (storage for other metadata info)
  * Created by IntelliJ IDEA.
- * User: isadykov
+ * User: smecsia
  * Date: 27.01.12
  * Time: 13:54
  */

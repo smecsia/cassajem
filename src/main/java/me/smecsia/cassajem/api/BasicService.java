@@ -9,7 +9,7 @@ import static me.smecsia.cassajem.util.ExceptionUtil.getFormattedStacktrace;
  * Basic class for all services.
  * Just autowires some useful things such as logger and provides the
  * ability to logAndThrow some exceptions
- * User: isadykov
+ * User: smecsia
  * Date: 14.03.12
  * Time: 17:31
  */

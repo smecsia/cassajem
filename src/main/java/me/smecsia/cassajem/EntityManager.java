@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Common interface for the entity manager
- * User: isadykov
+ * User: smecsia
  * Date: 30.01.12
  * Time: 18:34
  *

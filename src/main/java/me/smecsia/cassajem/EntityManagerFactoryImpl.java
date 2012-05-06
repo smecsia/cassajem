@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Creates the entity manager for the given entity class
- * User: isadykov
+ * User: smecsia
  * Date: 02.02.12
  * Time: 17:34
  */

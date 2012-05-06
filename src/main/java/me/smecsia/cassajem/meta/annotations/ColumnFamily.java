@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 /**
  * Class annotation. Defines the mapping of a current class to a column family.
- * User: isadykov
+ * User: smecsia
  * Date: 25.01.12
  * Time: 19:40
  */

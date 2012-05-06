@@ -17,7 +17,7 @@ import static org.testng.Assert.*;
 
 /**
  * Created by IntelliJ IDEA.
- * User: isadykov
+ * User: smecsia
  * Date: 27.01.12
  * Time: 18:43
  */

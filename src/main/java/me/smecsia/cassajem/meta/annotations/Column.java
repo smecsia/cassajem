@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * Field annotation. Maps field  to a column (for standard column family or super columns sub column).
- * User: isadykov
+ * User: smecsia
  * Date: 25.01.12
  * Time: 19:44
  */

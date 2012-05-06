@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Factory for the data access objects
- * User: isadykov
+ * User: smecsia
  * Date: 02.02.12
  * Time: 17:34
  */

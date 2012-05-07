@@ -7,7 +7,7 @@ First you need to add the following repository and dependency to your pom.xml:
         <dependency>
             <groupId>me.smecsia.cassajem</groupId>
             <artifactId>cassajem-core</artifactId>
-            <version>0.1</version>
+            <version>0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <!-- ... -->

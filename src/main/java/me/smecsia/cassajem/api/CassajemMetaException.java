@@ -10,4 +10,8 @@ public class CassajemMetaException extends CassajemException {
     public CassajemMetaException(String msg) {
         super(msg);
     }
+
+    public CassajemMetaException(Exception e) {
+        super(e);
+    }
 }

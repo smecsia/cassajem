@@ -460,7 +460,7 @@ public class EntityManagerImpl<T extends BasicEntity> extends BasicService imple
         Metadata<T> md = getEntityMetadata();
         try {
             if (columnSlice.getColumns().size() > 0) {
-                instance = getEntityClass().newInstance();
+                instance = md.newInstance(null);
                 if (md.getDynamicColumnsStorage() != null) {
                     md.getDynamicColumnsStorage().invokeSetter(instance, new LinkedHashMap());
                 }

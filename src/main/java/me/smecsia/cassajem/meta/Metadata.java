@@ -16,9 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,6 +44,8 @@ public class Metadata<T extends BasicEntity> {
     private ColumnInfo idColumn = null;
     private Class<T> entityClass = null;
 
+    private Constructor idConstructor = null;
+
     private ComparatorType comparatorType = defaultComparator;
     private String defaultValidationClassName = TypesUtil.defaultValidationClass.getName();
     private Class keyValidationClass = defaultValidationClass;
@@ -59,6 +59,14 @@ public class Metadata<T extends BasicEntity> {
 
     public Metadata(Class<T> clazz) {
         readMetadata(clazz);
+    }
+
+    @SuppressWarnings("unchecked")
+    public T newInstance(Object id) throws InvocationTargetException, IllegalAccessException, InstantiationException {
+        if (idConstructor != null) {
+            return (T) idConstructor.newInstance(id);
+        }
+        return entityClass.newInstance();
     }
 
     /**
@@ -144,6 +152,15 @@ public class Metadata<T extends BasicEntity> {
             }
         }
         chooseComparatorAndSerializer();
+        readConstructors();
+    }
+
+    protected void readConstructors() {
+        try {
+            idConstructor = entityClass.getConstructor(idColumn.getType());
+        } catch (Exception e) {
+            // ignore
+        }
     }
 
     /**

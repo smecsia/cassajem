@@ -1,8 +1,8 @@
 package me.smecsia.cassajem.meta;
 
-import me.smecsia.cassajem.meta.annotations.ColumnFamily;
 import me.prettyprint.hector.api.Serializer;
 import me.prettyprint.hector.api.ddl.ColumnType;
+import me.smecsia.cassajem.meta.annotations.ColumnFamily;
 
 import static me.smecsia.cassajem.util.TypesUtil.serializerByType;
 

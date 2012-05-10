@@ -328,7 +328,7 @@ public class Metadata<T extends BasicEntity> {
                 || !CompositeKey.class.isAssignableFrom((Class<?>) listTypes[0])) {
             throw new CassajemMetaException(
                     "CompositeColumnArray should be parametrized type implementing java.util.Map, first parameter " +
-                            "should be a type extending me.smecsia.me.smecsia.cassajem.me.smecsia.me.smecsia.cassajem.api.CompositeKey!");
+                            "should be a type extending me.smecsia.cassajem.api.CompositeKey!");
         }
         Class<CompositeKey> compositeClass = (Class<CompositeKey>) listTypes[0];
         CompositeColumnArrayInfo cInfo = new CompositeColumnArrayInfo(compositeClass);

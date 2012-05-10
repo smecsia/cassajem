@@ -191,10 +191,13 @@ public class EntityManagerImpl<T extends BasicEntity> extends BasicService imple
         }
         Class[] cTypes = md.getEntityInfo().compositeColumnTypes();
         Object[] values = new Object[cTypes.length];
-        for (int i = 0; i < cTypes.length; ++i) {
+        for (int i = 0; i < cTypes.length ; ++i) {
             values[i] = voidValue(cTypes[i]);
         }
-        return compositeKey(columnName, cTypes, values);
+        // first value is a columnName
+        // TODO: this may be incorrect in the case when first type is not a String
+        values[0] = columnName;
+        return compositeKey(cTypes, values);
     }
 
     /**

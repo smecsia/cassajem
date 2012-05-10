@@ -194,10 +194,7 @@ public class EntityManagerImpl<T extends BasicEntity> extends BasicService imple
         for (int i = 0; i < cTypes.length ; ++i) {
             values[i] = voidValue(cTypes[i]);
         }
-        // first value is a columnName
-        // TODO: this may be incorrect in the case when first type is not a String
-        values[0] = columnName;
-        return compositeKey(cTypes, values);
+        return compositeKey(columnName, cTypes, values);
     }
 
     /**

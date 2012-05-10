@@ -21,7 +21,7 @@ public class Config extends BasicService {
     private static final String PROP_CASCONFF = "me.smecsia.cassajem.cassandraConfig";
     private static final String PROP_EMFACTCS = "me.smecsia.cassajem.entityManagerFactory";
     private static final String PROP_ENTMGRCS = "me.smecsia.cassajem.entityManager";
-    private static final String DEFAULT_CASS_CONF_FILE = "/cassandra.yaml";
+    private static final String DEFAULT_CASS_CONF_FILE = "/cassajem-default-cassandra.yaml";
     private static final String DEFAULT_CASS_STRATEGY = "SimpleStrategy";
     private static final String DEFAULT_KEYSPACE_NAME = "default";
     private static final String DEFAULT_ENTITYMGR_FACT = "me.smecsia.cassajem.EntityManagerFactoryImpl";

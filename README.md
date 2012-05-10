@@ -1,7 +1,7 @@
-== Cassandra Just Entity Mapping ==
+## Cassandra Just Entity Mapping
 
 First you need to add the following repository and dependency to your pom.xml:
-<pre lang="xml">
+```xml
     <!-- ... -->
     <dependencies>
         <dependency>
@@ -19,9 +19,9 @@ First you need to add the following repository and dependency to your pom.xml:
         </repository>
     </repositories>
     <!-- ... -->
-</pre>
+```
 And now you can use all the features of Cassajem:
-<pre lang="java">
+```java
 @ColumnFamily(name = "users")
 public class User implements BasicEntity {
     @Id
@@ -35,8 +35,8 @@ public class User implements BasicEntity {
         this.userName = userName;
     }
 }
-</pre>
-<pre>
+```
+```java
 public class Main {
     public static void main(String[] args) throws IOException, TTransportException {
 
@@ -56,4 +56,4 @@ public class Main {
         System.exit(0);
     }
 }
-</pre>
+```

@@ -15,6 +15,8 @@ public class Config extends BasicService {
 
     private static final String CONFIG_PATTERN = "classpath*:cassajem.properties";
 
+    private static final String PROP_CLUSTERH = "me.smecsia.cassajem.clusterHost";
+    private static final String PROP_CLUSTERN = "me.smecsia.cassajem.clusterName";
     private static final String PROP_KEYSPACE = "me.smecsia.cassajem.keyspace";
     private static final String PROP_STRATEGY = "me.smecsia.cassajem.strategy";
     private static final String PROP_REPLFACT = "me.smecsia.cassajem.replicationFactor";
@@ -23,6 +25,8 @@ public class Config extends BasicService {
     private static final String PROP_ENTMGRCS = "me.smecsia.cassajem.entityManager";
     private static final String DEFAULT_CASS_CONF_FILE = "/cassajem-default-cassandra.yaml";
     private static final String DEFAULT_CASS_STRATEGY = "SimpleStrategy";
+    private static final String DEFAULT_CLUSTER_HOST = "localhost:9160";
+    private static final String DEFAULT_CLUSTER_NAME = "Cluster";
     private static final String DEFAULT_KEYSPACE_NAME = "default";
     private static final String DEFAULT_ENTITYMGR_FACT = "me.smecsia.cassajem.EntityManagerFactoryImpl";
     private static final String DEFAULT_ENTITYMGR_CLSS = "me.smecsia.cassajem.EntityManagerImpl";
@@ -56,6 +60,14 @@ public class Config extends BasicService {
 
     public String get(String property) {
         return configuration.getProperty(property);
+    }
+
+    public String getClusterHost() {
+        return get(PROP_CLUSTERH, DEFAULT_CLUSTER_HOST);
+    }
+
+    public String getClusterName() {
+        return get(PROP_CLUSTERN, DEFAULT_CLUSTER_NAME);
     }
 
     public String getKeyspaceName() {

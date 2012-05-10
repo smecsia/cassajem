@@ -5,6 +5,7 @@ import me.prettyprint.hector.api.Cluster;
 import me.prettyprint.hector.api.Keyspace;
 import me.prettyprint.hector.api.ddl.KeyspaceDefinition;
 import me.prettyprint.hector.api.factory.HFactory;
+import me.smecsia.cassajem.Config;
 import me.smecsia.cassajem.api.BasicService;
 
 /**
@@ -32,6 +33,16 @@ public class Connection extends BasicService {
         this.keyspaceName = keyspaceName;
         this.strategy = strategy;
         this.replicationFactor = replicationFactor;
+    }
+
+    public Connection() {
+        this(
+                Config.instance().getClusterName(),
+                Config.instance().getClusterHost(),
+                Config.instance().getKeyspaceName(),
+                Config.instance().getStrategy(),
+                Config.instance().getReplicationFactor()
+        );
     }
 
     /**
@@ -91,6 +102,14 @@ public class Connection extends BasicService {
                 cluster.addKeyspace(ksDef);
             }
         }
+    }
+
+    /**
+     * Drops & creates the keyspace (fully truncating the data)
+     */
+    public void truncateKeySpace() {
+        dropKeySpaceIfExists();
+        createKeySpaceIfNotExist();
     }
 
     public Cluster getCluster() {

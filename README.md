@@ -57,3 +57,5 @@ public class Main {
     }
 }
 ```
+For more examples see [entity manager](/smecsia/cassajem/blob/master/src/test/java/me/smecsia/cassajem/EntityManagerTest.java)
+and [DAO](/smecsia/cassajem/blob/master/src/test/java/me/smecsia/cassajem/dao/DAOFactoryTest.java) tests.

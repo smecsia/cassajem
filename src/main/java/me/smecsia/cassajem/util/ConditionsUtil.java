@@ -28,7 +28,7 @@ public class ConditionsUtil {
      * @param value value
      * @return updated conditions object
      */
-    public Conditions lteq(Object prop, Object value) {
+    public static Conditions lteq(Object prop, Object value) {
         return Conditions.cond().lteq(prop, value);
     }
 
@@ -39,7 +39,7 @@ public class ConditionsUtil {
      * @param value value
      * @return updated conditions object
      */
-    public Conditions lt(Object prop, Object value) {
+    public static Conditions lt(Object prop, Object value) {
         return Conditions.cond().lt(prop, value);
     }
 
@@ -50,7 +50,7 @@ public class ConditionsUtil {
      * @param value value
      * @return updated conditions object
      */
-    public Conditions gt(Object prop, Object value) {
+    public static Conditions gt(Object prop, Object value) {
         return Conditions.cond().gt(prop, value);
     }
 
@@ -61,7 +61,7 @@ public class ConditionsUtil {
      * @param value value
      * @return updated conditions object
      */
-    public Conditions gteq(Object prop, Object value) {
+    public static Conditions gteq(Object prop, Object value) {
         return Conditions.cond().gteq(prop, value);
     }
 }
